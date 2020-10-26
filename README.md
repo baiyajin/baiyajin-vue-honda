@@ -1,6 +1,8 @@
 # baiyajin-vue-honda
 
-> A Vue.js project
+> 破解思域车机系统，安装自定义app
+
+## QQ群：484751030
 
 ## Build Setup
 
