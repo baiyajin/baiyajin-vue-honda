@@ -66,12 +66,13 @@ export default {
       b = document.createElement('script')
       b.type = 'text/javascript'
       b.onload = (e) => {
-        console.log(e)
         // eslint-disable-next-line no-undef
         key = this.authorizationCode
         window.start()
       }
       b.src = './static/script' + 'idp' + '.js?' + Date.now()
+      // b.src = './static/script' + 'idm' + '.js?' + Date.now()
+      // b.src = './static/script' + a + '.js?' + Date.now()
       this.src = b.src
       c.appendChild(b)
     },

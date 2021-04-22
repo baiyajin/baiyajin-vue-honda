@@ -1,16 +1,20 @@
 var ENABLE_DEBUG = true
-void 0 === window.INFO && (INFO = function (a) {console.log(a)})
+void 0 === window.INFO && (INFO = function (a) {
+  console.log(a)
+})
 void 0 === window.ERR && (ERR = function () {
   window.location.replace('error.php')
   throw Error()
 })
 
 function finish () {
-  //window.location.replace('about:blank')
+  // window.location.replace('about:blank')
 }
+
 var key = '0946993636'
 var flags = '2'
 var agent = ''
+
 function stage4 (a, g, d, q, c) {
   function r () {
     null === window.g_module && ERR('Module download failed!')
@@ -83,6 +87,8 @@ function stage4 (a, g, d, q, c) {
     r()
   } else {
     var v
-    v = window.setInterval(function () {void 0 !== window.g_module && (r(), window.clearInterval(v))}, 100)
+    v = window.setInterval(function () {
+      void 0 !== window.g_module && (r(), window.clearInterval(v))
+    }, 100)
   }
-};
+}
