@@ -7,6 +7,12 @@
         <van-field v-on:input="validator" clearable v-model="authorizationCode" input-align="center" placeholder="请输入授权码"/>
       </van-form>
     </van-dialog>
+
+    <van-form style="margin-top: 100px;">
+      <van-field clearable v-model="code.device_id" input-align="center" placeholder="请输入设备ID"/>
+      <van-button @click="on_button_click" plain hairline type="primary" style="border-color:#8098ff;color:#8098ff;">生成注册码</van-button>
+      <van-field clearable v-model="code.registration_code" input-align="center"/>
+    </van-form>
   </div>
 </template>
 
@@ -14,6 +20,10 @@
 export default {
   data () {
     return {
+      code: {
+        device_id: '',
+        registration_code: ''
+      },
       show: false,
       src: '',
       authorizationCode: '0946993636',
@@ -31,6 +41,45 @@ export default {
     }
   },
   methods: {
+    on_button_click () {
+      let isValidCode = (code) => {
+        return typeof code === 'string' && code.length === 8 && !isNaN(Number('0x' + code))
+      }
+      let hashCode = (str) => {
+        // eslint-disable-next-line one-var
+        let hash = 0, i, chr
+        for (i = 0; i < str.length; i++) {
+          chr = str.charCodeAt(i)
+          hash = ((hash << 5) - hash) + chr
+          hash |= 0 // Convert to 32bit integer
+        }
+        return hash
+      }
+      let round = (v) => {
+        return (v >= 0 || -1) * Math.floor(Math.abs(v))
+      }
+      let deviceId = this.code.device_id.toUpperCase()
+      if (!isValidCode(deviceId)) {
+        return this.$toast({
+          message: '请输入8位设备ID',
+          icon: 'fail'
+        })
+      }
+      let str = 'google.com' + deviceId
+      let code = hashCode(str)
+      let c = Math.imul(code, code)
+      let d = round(53 / code)
+      let e = round(code / 4)
+      let f = Math.imul(e, 113)
+      let i = c + d + f
+      let j = 65535 & ((i & 65535) + ((i & -65536) >>> 16))
+      let hexStr = j.toString(16)
+      this.code.registration_code = hexStr.toUpperCase() + '-XXXX'
+      return this.$toast({
+        message: '生成注册码成功',
+        icon: 'fail'
+      })
+    },
     validator (val) {
       if (!val) {
         this.toast = {
