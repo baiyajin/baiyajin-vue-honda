@@ -19,10 +19,14 @@ export default defineConfig({
     }),
   ],
   shortcuts: {
-    // 按钮样式
-    'btn-primary': 'px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl',
-    'btn-secondary': 'px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl',
-    'btn-success': 'px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl',
+    // 按钮样式 - 统一尺寸
+    'btn-primary': 'px-8 py-4 text-lg font-semibold bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-32 h-14 flex items-center justify-center',
+    'btn-secondary': 'px-8 py-4 text-lg font-semibold bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-32 h-14 flex items-center justify-center',
+    'btn-success': 'px-8 py-4 text-lg font-semibold bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-32 h-14 flex items-center justify-center',
+    
+    // 小尺寸按钮
+    'btn-sm': 'px-6 py-3 text-base font-medium bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-24 h-12 flex items-center justify-center',
+    'btn-sm-secondary': 'px-6 py-3 text-base font-medium bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-24 h-12 flex items-center justify-center',
     
     // 卡片样式
     'card': 'bg-white/90 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-white/20',

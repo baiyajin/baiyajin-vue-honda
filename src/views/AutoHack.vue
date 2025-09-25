@@ -33,7 +33,7 @@
               type="primary" 
               @click="goToLegacyVersion" 
               :underline="false"
-              class="btn-success inline-flex items-center gap-3 px-8 py-4 text-lg font-semibold"
+              class="btn-success"
             >
               <span class="text-2xl">📱</span>
               切换到旧版本界面

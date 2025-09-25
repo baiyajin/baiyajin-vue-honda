@@ -18,7 +18,7 @@
           type="success" 
           @click="goToNewVersion" 
           :underline="false"
-          class="btn-success inline-flex items-center gap-3 px-8 py-4 text-lg font-semibold"
+          class="btn-success"
         >
           <span class="text-2xl">🚀</span>
           切换到新版本界面
@@ -42,8 +42,8 @@
         </div>
         <template #footer>
           <div class="flex justify-end gap-4">
-            <el-button @click="show = false" class="btn-secondary">取 消</el-button>
-            <el-button type="primary" @click="submitCode" class="btn-primary">确 定</el-button>
+            <el-button @click="show = false" class="btn-sm-secondary">取 消</el-button>
+            <el-button type="primary" @click="submitCode" class="btn-sm">确 定</el-button>
           </div>
         </template>
       </el-dialog>
@@ -70,7 +70,7 @@
             <el-button 
               @click="on_button_click" 
               type="primary" 
-              class="btn-primary px-12 py-4 text-lg font-semibold"
+              class="btn-primary"
             >
               <span class="mr-3">⚙️</span>
               生成注册码
