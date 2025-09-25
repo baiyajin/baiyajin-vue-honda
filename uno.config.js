@@ -31,7 +31,7 @@ export default defineConfig({
     
     // 卡片样式
     'card': 'bg-white/90 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-white/20',
-    'card-hover': 'card hover:shadow-2xl hover:scale-105 transition-all duration-300',
+    'card-hover': 'card hover:shadow-2xl transition-all duration-300',
     
     // 输入框样式
     'input': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-white/80 backdrop-blur-sm',
