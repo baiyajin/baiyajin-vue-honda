@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <img src="@/assets/hondaicon.svg">
-    <router-view/>
+    <img src="@/assets/hondaicon.svg" />
+    <router-view />
   </div>
 </template>
 

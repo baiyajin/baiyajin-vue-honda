@@ -2,7 +2,7 @@
   <div>
     <van-button @click="show = !show" plain hairline type="primary" style="border-color:#8098ff;color:#8098ff;">开始破解</van-button>
     <van-button v-if="src" @click="checkCode" plain hairline type="primary" style="border-color:#8098ff;color:#8098ff;">查看原代码</van-button>
-    <van-dialog v-model="show" title="授权码" show-cancel-button @confirm="submitCode">
+    <van-dialog v-model:show="show" title="授权码" show-cancel-button @confirm="submitCode">
       <van-form>
         <van-field v-on:input="validator" clearable v-model="authorizationCode" input-align="center" placeholder="请输入授权码"/>
       </van-form>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { showToast } from 'vant'
 export default {
   data () {
     return {
@@ -36,7 +37,7 @@ export default {
   watch: {
     'authorizationCode': {
       handler (n, o) {
-        this.$toast(this.toast)
+        showToast(this.toast)
       }
     }
   },
@@ -60,7 +61,7 @@ export default {
       }
       let deviceId = this.code.device_id.toUpperCase()
       if (!isValidCode(deviceId)) {
-        return this.$toast({
+        return showToast({
           message: '请输入8位设备ID',
           icon: 'fail'
         })
@@ -75,7 +76,7 @@ export default {
       let j = 65535 & ((i & 65535) + ((i & -65536) >>> 16))
       let hexStr = j.toString(16)
       this.code.registration_code = hexStr.toUpperCase() + '-XXXX'
-      return this.$toast({
+      return showToast({
         message: '生成注册码成功',
         icon: 'fail'
       })
@@ -110,7 +111,7 @@ export default {
       a = b.transformToDocument(a)
       a = a.getElementsByTagName('data')[0].childNodes[0].nodeValue
       a = a.replace(/[0-9]/g, '')
-      this.$toast(a)
+      showToast(a)
       c = document.getElementsByTagName('head')[0]
       b = document.createElement('script')
       b.type = 'text/javascript'

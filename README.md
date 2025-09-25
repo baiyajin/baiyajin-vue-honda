@@ -1,32 +1,18 @@
-# baiyajin-vue-honda
+## baiyajin-vue-honda (Vue 3 + Vite)
 
-> 破解思域车机系统，安装自定义app
+破解思域车机系统，安装自定义 app。项目已重构为 Vue 3 + Vite 7（不使用 TS）。
 
-## 技术QQ群：484751030
+### 技术QQ群：484751030
 
-## Build Setup
-
-``` bash
-# install dependencies
+### 使用
+```bash
 npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
+npm run dev       # 本地开发
+npm run build     # 生产构建
+npm run preview   # 预览生产构建
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### 说明
+- 静态破解脚本放在 `static/`，通过 Vite `publicDir` 直接按根路径访问，例如 `/stage4.js`、`/scriptidp.js`。
+- 入口文件为 `index.html` 与 `src/main.js`（ESM）。
+- 路由升级到 Vue Router 4。
