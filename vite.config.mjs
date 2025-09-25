@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import legacy from '@vitejs/plugin-legacy'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
@@ -85,7 +86,42 @@ function customDevEndpoints() {
 }
 
 export default defineConfig({
-  plugins: [vue(), customDevEndpoints()],
+  plugins: [
+    vue(),
+    legacy({
+      targets: [
+        'Android >= 4.0',
+        'Chrome >= 30',
+        'Safari >= 6',
+        'iOS >= 6',
+        'Firefox >= 30',
+        'Samsung >= 4',
+        'and_chr >= 30',
+        'and_ff >= 30',
+        'and_uc >= 9.9'
+      ],
+      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+      renderLegacyChunks: true,
+      polyfills: [
+        'es.symbol',
+        'es.array.filter',
+        'es.promise',
+        'es.promise.finally',
+        'es/map',
+        'es/set',
+        'es.array.for-each',
+        'es.object.define-properties',
+        'es.object.get-own-property-descriptor',
+        'es.object.get-own-property-descriptors',
+        'es.object.keys',
+        'es.object.to-string',
+        'web.dom-collections.for-each',
+        'esnext.global-this',
+        'esnext.string.match-all'
+      ]
+    }),
+    customDevEndpoints()
+  ],
   root: '.',
   publicDir: 'static',
   resolve: {
@@ -95,6 +131,18 @@ export default defineConfig({
   },
   server: {
     host: true
+  },
+  build: {
+    target: 'es2015',
+    cssTarget: 'chrome61',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'element-plus': ['element-plus'],
+          'vue-vendor': ['vue', 'vue-router']
+        }
+      }
+    }
   }
 })
 

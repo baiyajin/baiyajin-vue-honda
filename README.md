@@ -11,6 +11,7 @@
 - 通过 Vite `publicDir` 直出静态破解脚本，路径与老版本保持一致
 - 内置开发端点，模拟 `stage1_xml.py` 与错误上报，便于本地调试
 - ESLint 9（Flat Config）规则，提供基础质量保障
+- **Android 4.0+ 浏览器兼容**：使用 `@vitejs/plugin-legacy` 自动降级支持
 
 ---
 
@@ -87,7 +88,13 @@ pnpm run lint
   - 答：本地端点会返回最小可用的 XSL，重启 dev 服务后再试；若仍失败，请贴 vConsole 全部日志。
 
 - 问：为什么页面会生成大量 `blob:` iframe？
-  - 答：用于并行/隔离地加载特制文档，做内存与文档结构喷射，帮助稳定命中“可观测变化”。
+  - 答：用于并行/隔离地加载特制文档，做内存与文档结构喷射，帮助稳定命中"可观测变化"。
+
+- 问：项目能在 Android 4.0 浏览器上运行吗？
+  - 答：可以！已配置 `@vitejs/plugin-legacy` 插件，自动为旧浏览器生成兼容版本。现代浏览器使用 ES modules，旧浏览器自动降级到包含 polyfills 的 legacy 版本。
+
+- 问：构建后的文件很大，正常吗？
+  - 答：正常。legacy 版本包含大量 polyfills 以支持旧浏览器，现代浏览器会使用更小的 ES modules 版本。可通过代码分割进一步优化。
 
 ---
 
@@ -97,6 +104,7 @@ pnpm run lint
 - Element Plus `^2.11.x`
 - Vite `^7.x`
 - ESLint `9.36.0`（Flat Config）
+- `@vitejs/plugin-legacy` `^5.0.0`（Android 4.0+ 兼容）
 
 ---
 
@@ -104,6 +112,7 @@ pnpm run lint
 - 静态脚本放在 `static/` 下，访问路径以 `/` 开头，例如：`/stage4.js`、`/scriptidp.js`
 - 已移除 Vant，UI 统一使用 Element Plus
 - 如需上报/采集更详细日志，可在 `vite.config.mjs` 自定义中间件或在 `home.vue` 中扩展 `window.ERR`
+- **Android 4.0 兼容**：构建时会自动生成 legacy 版本，旧浏览器自动降级使用
 
 ---
 
