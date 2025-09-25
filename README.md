@@ -1,6 +1,8 @@
 # 🚗 baiyajin-vue-honda (Vue 3 + Vite 7)
 
 > 🔧 思域车机（HONDA Headunit）破解入口与工具前端。已完整重构为 Vue 3 + Vite 7，纯 JavaScript（无 TS），UI 采用 Element Plus。
+> <img width="1675" height="905" alt="image" src="https://github.com/user-attachments/assets/a660fb74-fc50-4312-86db-3f3ae2e74426" />
+
 
 ## 💬 技术交流群
 - 📱 QQ 群三，群一二已满：484751030
