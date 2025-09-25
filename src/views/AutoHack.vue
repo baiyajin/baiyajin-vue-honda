@@ -1,20 +1,47 @@
 <template>
-  <div class="autohack">
-    <el-card>
-      <template #header>
-        <div class="card-header">
-          <span>AutoHack（vue3 vite7 element-plus 版本）</span>
-          <el-button type="primary" @click="startHack" plain>开始破解</el-button>
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div class="max-w-2xl mx-auto">
+      <div class="card shadow-xl">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200">
+          <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <span class="text-3xl">🚗</span>
+            AutoHack（Vue 3 + Vite 7 + UnoCSS）
+          </h1>
+          <el-button type="primary" @click="startHack" class="btn-primary">
+            <span class="mr-2">🔧</span>
+            开始破解
+          </el-button>
         </div>
-      </template>
-      <p>将旧的普通 HTML 流程重构为 Vue 3 视图，入口脚本仍复用 exploit 脚本。</p>
-      <p>调试日志请查看 vConsole 与浏览器控制台。</p>
-      <p>
-        <el-link type="primary" @click="goToLegacyVersion" :underline="false">
-          📱 切换到旧版本界面
-        </el-link>
-      </p>
-    </el-card>
+        
+        <div class="p-6 space-y-4">
+          <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+            <p class="text-blue-800">
+              <span class="font-semibold">✨ 现代化重构：</span>
+              将旧的普通 HTML 流程重构为 Vue 3 视图，入口脚本仍复用 exploit 脚本。
+            </p>
+          </div>
+          
+          <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+            <p class="text-amber-800 flex items-center gap-2">
+              <span class="text-lg">🔍</span>
+              调试日志请查看 vConsole 与浏览器控制台。
+            </p>
+          </div>
+          
+          <div class="flex justify-center pt-4">
+            <el-link 
+              type="primary" 
+              @click="goToLegacyVersion" 
+              :underline="false"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+            >
+              <span class="text-xl">📱</span>
+              切换到旧版本界面
+            </el-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -67,16 +94,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.autohack {
-  padding: 16px;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-</style>
-
-

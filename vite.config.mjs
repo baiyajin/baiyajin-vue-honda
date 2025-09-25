@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import legacy from '@vitejs/plugin-legacy'
+import UnoCSS from 'unocss/vite'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
@@ -88,6 +89,7 @@ function customDevEndpoints() {
 export default defineConfig({
   plugins: [
     vue(),
+    UnoCSS(),
     legacy({
       targets: [
         'Android >= 4.0',

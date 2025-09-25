@@ -1,6 +1,15 @@
 <template>
-  <div id="app">
-    <img src="@/assets/hondaicon.svg" />
+  <div id="app" class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <!-- Honda Logo -->
+    <div class="flex justify-center pt-8 pb-4">
+      <img 
+        src="@/assets/hondaicon.svg" 
+        alt="Honda Logo" 
+        class="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
+    </div>
+    
+    <!-- 路由视图 -->
     <router-view />
   </div>
 </template>
@@ -10,14 +19,3 @@ export default {
   name: 'App'
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

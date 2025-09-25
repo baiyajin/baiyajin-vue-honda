@@ -1,37 +1,94 @@
 <template>
-  <div>
-    <div style="margin-bottom: 20px;display: flex;flex-direction: column;">
-      <el-button @click="show = true" type="primary" plain>开始破解</el-button>
-      <el-button v-if="src" @click="checkCode" type="primary" plain>查看原代码</el-button>
-      <el-link type="success" @click="goToNewVersion" :underline="false" style="margin: 20px;">
-        🚀 切换到新版本界面
-      </el-link>
-    </div>
-    <el-dialog v-model="show" title="授权码" width="420">
-      <el-form @submit.prevent>
-        <el-form-item>
-          <el-input v-model="authorizationCode" @input="validator" placeholder="请输入授权码" clearable />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="show = false">取 消</el-button>
-          <el-button type="primary" @click="submitCode">确 定</el-button>
-        </span>
-      </template>
-    </el-dialog>
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- 头部按钮区域 -->
+      <div class="flex-col-center space-y-4 mb-8">
+        <div class="flex gap-4 flex-wrap justify-center">
+          <el-button @click="show = true" type="primary" class="btn-primary">
+            <span class="mr-2">🔓</span>
+            开始破解
+          </el-button>
+          <el-button v-if="src" @click="checkCode" type="primary" class="btn-secondary">
+            <span class="mr-2">👁️</span>
+            查看原代码
+          </el-button>
+        </div>
+        
+        <el-link 
+          type="success" 
+          @click="goToNewVersion" 
+          :underline="false"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105"
+        >
+          <span class="text-xl">🚀</span>
+          切换到新版本界面
+        </el-link>
+      </div>
+      <!-- 授权码对话框 -->
+      <el-dialog v-model="show" title="🔐 授权码" width="420" class="rounded-lg">
+        <div class="space-y-4">
+          <el-form @submit.prevent>
+            <el-form-item>
+              <el-input 
+                v-model="authorizationCode" 
+                @input="validator" 
+                placeholder="请输入授权码" 
+                clearable 
+                class="input"
+              />
+            </el-form-item>
+          </el-form>
+        </div>
+        <template #footer>
+          <div class="flex justify-end gap-3">
+            <el-button @click="show = false" class="btn-secondary">取 消</el-button>
+            <el-button type="primary" @click="submitCode" class="btn-primary">确 定</el-button>
+          </div>
+        </template>
+      </el-dialog>
 
-    <el-form style="margin-top: 100px;" @submit.prevent>
-      <el-form-item>
-        <el-input v-model="code.device_id" placeholder="请输入设备ID" clearable />
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="on_button_click" type="primary" plain>生成注册码</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="code.registration_code" readonly clearable />
-      </el-form-item>
-    </el-form>
+      <!-- 设备ID和注册码区域 -->
+      <div class="card bg-white/80 backdrop-blur-sm">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
+          <span class="text-2xl">🛠️</span>
+          设备管理
+        </h2>
+        
+        <el-form @submit.prevent class="space-y-6">
+          <el-form-item>
+            <label class="block text-sm font-medium text-gray-700 mb-2">设备ID</label>
+            <el-input 
+              v-model="code.device_id" 
+              placeholder="请输入设备ID" 
+              clearable 
+              class="input"
+            />
+          </el-form-item>
+          
+          <div class="flex justify-center">
+            <el-button 
+              @click="on_button_click" 
+              type="primary" 
+              class="btn-primary px-8 py-3"
+            >
+              <span class="mr-2">⚙️</span>
+              生成注册码
+            </el-button>
+          </div>
+          
+          <el-form-item>
+            <label class="block text-sm font-medium text-gray-700 mb-2">注册码</label>
+            <el-input 
+              v-model="code.registration_code" 
+              placeholder="生成的注册码将显示在这里" 
+              clearable 
+              readonly
+              class="input bg-gray-50"
+            />
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -163,9 +220,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .van-toast {
-    top: 90%;
-  }
-</style>

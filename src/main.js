@@ -8,6 +8,7 @@ import VConsole from 'vconsole'
 import ElementPlus from 'element-plus'
 import { ElNotification } from 'element-plus'
 import 'element-plus/dist/index.css'
+import 'virtual:uno.css'
 
 const vconsole = new VConsole()
 
