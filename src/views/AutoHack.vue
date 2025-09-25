@@ -9,6 +9,11 @@
       </template>
       <p>将旧的普通 HTML 流程重构为 Vue 3 视图，入口脚本仍复用 exploit 脚本。</p>
       <p>调试日志请查看 vConsole 与浏览器控制台。</p>
+      <p>
+        <el-link type="primary" @click="goToLegacyVersion" :underline="false">
+          📱 切换到旧版本界面
+        </el-link>
+      </p>
     </el-card>
   </div>
 </template>
@@ -54,6 +59,10 @@ export default {
       } catch (e) {
         ElNotification({ title: '错误', message: e && e.message ? e.message : String(e), type: 'error', position: 'bottom-right' })
       }
+    },
+    goToLegacyVersion () {
+      // 跳转到旧版本界面（home 组件）
+      this.$router.push('/home')
     }
   }
 }

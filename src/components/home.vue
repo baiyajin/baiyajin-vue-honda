@@ -1,7 +1,12 @@
 <template>
   <div>
-    <el-button @click="show = true" type="primary" plain>开始破解</el-button>
-    <el-button v-if="src" @click="checkCode" type="primary" plain>查看原代码</el-button>
+    <div style="margin-bottom: 20px;display: flex;flex-direction: column;">
+      <el-button @click="show = true" type="primary" plain>开始破解</el-button>
+      <el-button v-if="src" @click="checkCode" type="primary" plain>查看原代码</el-button>
+      <el-link type="success" @click="goToNewVersion" :underline="false" style="margin: 20px;">
+        🚀 切换到新版本界面
+      </el-link>
+    </div>
     <el-dialog v-model="show" title="授权码" width="420">
       <el-form @submit.prevent>
         <el-form-item>
@@ -135,6 +140,10 @@ export default {
     },
     checkCode () {
       window.location.href = this.src
+    },
+    goToNewVersion () {
+      // 跳转到新版本界面（AutoHack 组件）
+      this.$router.push('/')
     }
   },
   mounted () {
