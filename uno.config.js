@@ -11,12 +11,13 @@ export default defineConfig({
       },
     }),
     presetTypography(),
-    presetWebFonts({
-      fonts: {
-        sans: ['Inter:400,500,600,700', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono:400,500,600', 'monospace'],
-      },
-    }),
+    // 暂时移除 WebFonts 预设以避免网络问题
+    // presetWebFonts({
+    //   fonts: {
+    //     sans: ['Inter:400,500,600,700', 'system-ui', 'sans-serif'],
+    //     mono: ['JetBrains Mono:400,500,600', 'monospace'],
+    //   },
+    // }),
   ],
   shortcuts: {
     // 按钮样式 - 统一尺寸
@@ -52,7 +53,6 @@ export default defineConfig({
     
     // 动画样式
     'animate-fade-in': 'animate-fade-in',
-    'animate-slide-up': 'animate-slide-up',
     'animate-bounce-in': 'animate-bounce-in',
   },
   theme: {
@@ -133,7 +133,6 @@ export default defineConfig({
   safelist: [
     // 确保这些类始终被包含
     'animate-fade-in',
-    'animate-slide-up',
     'animate-bounce-in',
     'glass-light',
     'glass-medium',

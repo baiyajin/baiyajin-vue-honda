@@ -2,27 +2,25 @@
   <div class="min-h-screen bg-gradient-secondary p-4 animate-fade-in">
     <div class="container">
       <!-- 头部按钮区域 -->
-      <div class="flex-col-center space-y-6 mb-12 animate-slide-up">
-        <div class="flex gap-6 flex-wrap justify-center">
+      <div class="flex-col-center space-y-6 mb-12">
+        <div class="flex gap-4 flex-wrap justify-center items-center">
           <el-button @click="show = true" type="primary" class="btn-primary">
             <span class="mr-2">🔓</span>
             开始破解
           </el-button>
-          <el-button v-if="src" @click="checkCode" type="primary" class="btn-secondary">
+          <el-button v-if="src" @click="checkCode" type="primary">
             <span class="mr-2">👁️</span>
             查看原代码
           </el-button>
+          <el-button 
+            type="primary" 
+            @click="goToNewVersion" 
+            class="btn-primary"
+          >
+            <span class="mr-2">🚀</span>
+            切换版本
+          </el-button>
         </div>
-        
-        <el-link 
-          type="success" 
-          @click="goToNewVersion" 
-          :underline="false"
-          class="btn-success"
-        >
-          <span class="text-2xl">🚀</span>
-          切换到新版本界面
-        </el-link>
       </div>
       <!-- 授权码对话框 -->
       <el-dialog v-model="show" title="🔐 授权码" width="420" class="rounded-xl">
@@ -49,7 +47,7 @@
       </el-dialog>
 
       <!-- 设备ID和注册码区域 -->
-      <div class="card-hover animate-slide-up">
+      <div class="card-hover">
         <h2 class="text-2xl font-bold text-gradient mb-8 text-center flex items-center justify-center gap-3">
           <span class="text-3xl animate-bounce-in">🛠️</span>
           设备管理

@@ -1,44 +1,43 @@
 <template>
   <div class="min-h-screen bg-gradient-primary p-4 animate-fade-in">
     <div class="container">
-      <div class="card-hover animate-slide-up">
-        <div class="flex items-center justify-between p-6 border-b border-gray-200/50">
-          <h1 class="text-3xl font-bold text-gradient flex items-center gap-3">
+      <div class="card-hover ">
+        <div class="p-6 border-b border-gray-200/50">
+          <h1 class="text-3xl font-bold text-gradient flex items-center gap-3 mb-6 text-center justify-center">
             <span class="text-4xl animate-bounce-in">🚗</span>
             AutoHack（Vue 3 + Vite 7 + UnoCSS）
           </h1>
-          <el-button type="primary" @click="startHack" class="btn-primary">
-            <span class="mr-2">🔧</span>
-            开始破解
-          </el-button>
+          <div class="flex gap-4 justify-center items-center">
+            <el-button type="primary" @click="startHack" class="btn-primary">
+              <span class="mr-2">🔧</span>
+              开始破解
+            </el-button>
+            <el-button 
+              type="primary" 
+              @click="goToLegacyVersion" 
+              class="btn-primary"
+            >
+              <span class="mr-2">📱</span>
+              切换版本
+            </el-button>
+          </div>
         </div>
         
         <div class="p-6 space-y-6">
-          <div class="glass-light border-l-4 border-blue-400 p-6 rounded-r-xl animate-slide-up">
+          <div class="glass-light border-l-4 border-blue-400 p-6 rounded-r-xl ">
             <p class="text-blue-800 text-lg">
               <span class="font-bold text-xl">✨ 现代化重构：</span>
               将旧的普通 HTML 流程重构为 Vue 3 视图，入口脚本仍复用 exploit 脚本。
             </p>
           </div>
           
-          <div class="glass-light border-l-4 border-amber-400 p-6 rounded-r-xl animate-slide-up">
+          <div class="glass-light border-l-4 border-amber-400 p-6 rounded-r-xl ">
             <p class="text-amber-800 flex items-center gap-3 text-lg">
               <span class="text-2xl">🔍</span>
               调试日志请查看 vConsole 与浏览器控制台。
             </p>
           </div>
           
-          <div class="flex justify-center pt-6">
-            <el-link 
-              type="primary" 
-              @click="goToLegacyVersion" 
-              :underline="false"
-              class="btn-success"
-            >
-              <span class="text-2xl">📱</span>
-              切换到旧版本界面
-            </el-link>
-          </div>
         </div>
       </div>
     </div>
